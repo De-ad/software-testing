@@ -2,6 +2,8 @@ name: Measure coverage
 
 on:
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -28,6 +30,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 100
           min-coverage-changed-files: 100
+          debug-mode: true
           title: ':coffee: Coverage report'
           pass-emoji: ':nail_care:'
           fail-emoji: ':skull:'
+      - name: Fail PR if overall coverage is less than 100%
+        if: ${{ steps.jacoco.outputs.coverage-overall < 100.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Overall coverage is less than 100%!')
