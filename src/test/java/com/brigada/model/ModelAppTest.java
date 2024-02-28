@@ -13,4 +13,9 @@ class ModelAppTest {
         assertEquals(12, modelApp.add(6, 6));
     }
 
+    @Test
+    void div() {
+        assertEquals(12d, modelApp.div(48, 4));
+    }
+
 }
