@@ -2,6 +2,8 @@ name: Measure coverage
 
 on:
   pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -14,6 +16,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
+          distribution: 'temurin'
       - name: Run Tests with Maven
         run: mvn clean test
       - name: Generate Test Coverage Report
@@ -24,6 +27,16 @@ jobs:
         with:
           paths: |
             ${{ github.workspace }}/target/site/jacoco/jacoco.xml
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 100
           min-coverage-changed-files: 100
+          debug-mode: true
+          title: ':coffee: Coverage report'
+          pass-emoji: ':nail_care:'
+          fail-emoji: ':skull:'
+      - name: Fail PR if overall coverage is less than 100%
+        if: ${{ steps.jacoco.outputs.coverage-overall < 100.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Overall coverage is less than 100%!')
