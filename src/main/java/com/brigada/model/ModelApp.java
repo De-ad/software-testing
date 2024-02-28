@@ -10,4 +10,8 @@ public class ModelApp {
         return (double) a / b;
     }
 
+    public int sub(int a, int b) {
+        return a - b;
+    }
+
 }
