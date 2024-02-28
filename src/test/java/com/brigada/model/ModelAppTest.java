@@ -22,4 +22,9 @@ class ModelAppTest {
     void sub() {
         assertEquals(1, modelApp.sub(3, 2));
     }
+
+    @Test
+    void mul() {
+        assertEquals(12, modelApp.mul(3, 4));
+    }
 }
