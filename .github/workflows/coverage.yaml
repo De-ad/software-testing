@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '11'
+          distribution: 'temurin'
       - name: Run Tests with Maven
         run: mvn clean test
       - name: Generate Test Coverage Report
@@ -27,4 +28,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           min-coverage-overall: 100
           min-coverage-changed-files: 100
-          distribution: 'ubuntu'
