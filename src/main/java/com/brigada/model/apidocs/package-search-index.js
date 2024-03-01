@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.brigada.model"},{"l":"com.brigada.model.enumerations"}];updateSearchResults();
