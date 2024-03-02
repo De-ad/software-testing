@@ -56,12 +56,13 @@ public enum EmotionalState {
         } else if (level < EmotionalState.CHILL.getLevel()) {
             return EmotionalState.CHILL;
         }
+        EmotionalState requestedState = null;
         for (EmotionalState state : EmotionalState.values()) {
             if (state.getLevel() == level) {
-                return state;
+                requestedState = state;
             }
         }
-        throw new RuntimeException("Got unexpected emotional state level");
+        return requestedState;
     }
 
     @Override
