@@ -22,7 +22,7 @@ public class Location {
     /**
      * Посетители локации.
      */
-    private final Set<Object> residents = new TreeSet<>();
+    private final TreeSet<Object> residents = new TreeSet<>();
 
     /**
      * Создает локацию с заданным именем.
@@ -30,7 +30,7 @@ public class Location {
      * @param name Имя локации.
      */
     public Location(String name) {
-        this.name = name;
+        setName(name);
     }
 
     /**
@@ -69,36 +69,39 @@ public class Location {
     }
 
     /**
-     * Поиск тел в локации с последующей очисткой. Если тело было найдено, распространяется {@link SmellType запах} гнили.
-     */
-    public void findBodies() {
-        for (Object resident : residents) {
-            if (resident instanceof Deadable) {
-                Deadable deadResident = ((Deadable) resident);
-                if (deadResident.isDead()) {
-                    spreadSmell(SmellType.PUTRID);
-                    residents.remove(deadResident);
-                }
-
-            }
-        }
-    }
-
-    /**
      * Распространение запаха.
      *
      * @param smellType Запах, который будет передан всем, {@link SmellSensible воспринимающим запах}.
      */
     public void spreadSmell(SmellType smellType) {
-        if (smellType == null) {
-            throw new NullPointerException("Smell type can't be null");
-        }
         for (Object resident : residents) {
             if (resident instanceof SmellSensible) {
                 ((SmellSensible) resident).detectSmell(smellType);
             }
         }
         findBodies();
+    }
+
+    /**
+     * Поиск тел в локации с последующей очисткой. Если тело было найдено, распространяется {@link SmellType запах} гнили.
+     */
+    private void findBodies() {
+        boolean detected = false;
+        Set<Deadable> deadResidents = new TreeSet<>();
+        for (Object resident : residents) {
+            if (resident instanceof Deadable) {
+                Deadable deadResident = ((Deadable) resident);
+                if (deadResident.isDead()) {
+                    detected = true;
+                    deadResidents.add(deadResident);
+                }
+
+            }
+        }
+        if (detected) {
+            residents.removeAll(deadResidents);
+            spreadSmell(SmellType.PUTRID);
+        }
     }
 
     /**
