@@ -3,9 +3,9 @@ package com.brigada.model;
 import com.brigada.model.enumerations.EmotionalState;
 import com.brigada.model.enumerations.SmellType;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,6 +30,7 @@ class HumanTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"  ", "\t", "\n"})
+    @DisplayName("IllegalArgument exception after invalid name in constructor")
     public void whenInvalidNameThenExpectedIllegalArgumentException(String invalidName) {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
@@ -40,6 +41,7 @@ class HumanTest {
 
     @ParameterizedTest
     @ValueSource(doubles = {Double.NEGATIVE_INFINITY, -5d, 0d, Double.POSITIVE_INFINITY, Double.NaN})
+    @DisplayName("IllegalArgument exception after invalid height in constructor")
     public void whenInvalidHeightThenExpectedIllegalArgumentException(double invalidHeight) {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
@@ -50,6 +52,7 @@ class HumanTest {
 
     @ParameterizedTest
     @ValueSource(doubles = {Double.NEGATIVE_INFINITY, -5d, 0d, Double.POSITIVE_INFINITY, Double.NaN})
+    @DisplayName("IllegalArgument exception after invalid weight in constructor")
     public void whenInvalidWeightThenExpectedIllegalArgumentException(double invalidWeight) {
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
@@ -59,18 +62,21 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("Human dies when height is greater than allowed")
     public void whenHeightMoreThanMaximumThenDead() {
         Human human = new Human(validName, Human.MAX_HEIGHT + 1, validWeight);
         assertTrue(human.isDead());
     }
 
     @Test
+    @DisplayName("Human dies when weight is greater than allowed")
     public void whenWeightMoreThanMaximumThenDead() {
         Human human = new Human(validName, validHeight, Human.MAX_WEIGHT + 1);
         assertTrue(human.isDead());
     }
 
     @Test
+    @DisplayName("CompareTo test")
     public void compareToTest() {
         Human copy = new Human(aliveHuman.getName(), aliveHuman.getHeight(), aliveHuman.getWeight());
         Human lessWeight = new Human(aliveHuman.getName(), aliveHuman.getHeight(), aliveHuman.getWeight() - 1);
@@ -85,6 +91,7 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("NullPointerException exception after setting emotional state as null")
     public void whenChangeEmotionalStateToNullThenExpectedNullPointerException() {
         Exception exception = assertThrows(
                 NullPointerException.class,
@@ -94,6 +101,7 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("Smell determines the emotional state")
     public void whenChangeSmellThenChangeEmotionalState() {
         assertAll(
                 () -> {
@@ -121,6 +129,7 @@ class HumanTest {
 
     @ParameterizedTest
     @NullSource
+    @DisplayName("NullPointerException exception after detecting smell type as null")
     public void whenChangeSmellToNullThenExpectedNullPointerException(SmellType smellType) {
         Exception exception = assertThrows(
                 NullPointerException.class,
@@ -130,6 +139,7 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("If weight is enough and emotional state is mad, then human will loss weight")
     public void whenEmotionalStateIsMadAndWeightIsEnoughThenLooseWeight() {
         double actual = Human.STRESS_WEIGHT_LOSS + 0.1d;
         double expected = actual - Human.STRESS_WEIGHT_LOSS;
@@ -140,6 +150,7 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("If weight isn't enough and emotional state is mad, then human will die")
     public void whenEmotionalStateIsMadAndWeightIsNotEnoughThenDie() {
         double actual = Human.STRESS_WEIGHT_LOSS;
 
@@ -150,6 +161,7 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("Shadow casting for dead and alive humans is different")
     public void castShadowTest() {
         assertAll("Alive and dead has different ways to calculate shadow",
                 () -> assertEquals(aliveHuman.getHeight() * aliveHuman.getWeight() * 3 / 5, aliveHuman.castShadow()),
@@ -159,6 +171,7 @@ class HumanTest {
     }
 
     @Test
+    @DisplayName("You can’t change dead's state")
     public void whenIsDeadThenCantChangeState() {
         assertAll(
                 () -> {
