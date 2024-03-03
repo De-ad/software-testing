@@ -8,7 +8,7 @@ on:
       - ".github/workflows/*"
       - ".markdownlint.yaml"
       - "**/*.md"
-      - "!**/apidocs/**"
+      - "!apidocs/**"
 
 jobs:
   lint:
