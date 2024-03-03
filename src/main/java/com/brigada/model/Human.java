@@ -14,6 +14,21 @@ import lombok.Getter;
 public class Human implements Shadable, SmellSensible, Deadable, Comparable<Human> {
 
     /**
+     * Максимальный рост, совместимый с жизнью.
+     */
+    public static final double MAX_HEIGHT = 300d;
+
+    /**
+     * Максимальный вес, совместимый с жизнью.
+     */
+    public static final double MAX_WEIGHT = 700d;
+
+    /**
+     * Потеря веса при лишении рассудка.
+     */
+    public static final double STRESS_WEIGHT_LOSS = 100d;
+
+    /**
      * Имя.
      */
     private String name;
@@ -70,7 +85,7 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
         if (isDead()) {
             return;
         }
-        double loosedWeight = this.weight - 100;
+        double loosedWeight = this.weight - Human.STRESS_WEIGHT_LOSS;
         if (loosedWeight <= 0) {
             dead();
         } else {
@@ -102,13 +117,12 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
         if (isDead()) {
             return;
         }
-        if (height <= 0 || height == Double.POSITIVE_INFINITY) {
+        if (Double.isNaN(height) || height <= 0 || height == Double.POSITIVE_INFINITY) {
             throw new IllegalArgumentException("Height must be positive non-inf value");
-        } else if (height >= 300d) {
+        } else if (height > Human.MAX_HEIGHT) {
             dead();
-        } else {
-            this.height = height;
         }
+        this.height = height;
     }
 
     /**
@@ -120,13 +134,12 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
         if (isDead()) {
             return;
         }
-        if (weight <= 0 || weight == Double.POSITIVE_INFINITY) {
+        if (Double.isNaN(weight) || weight <= 0 || weight == Double.POSITIVE_INFINITY) {
             throw new IllegalArgumentException("Weight must be positive non-inf value");
-        } else if (weight > 700) {
+        } else if (weight > Human.MAX_WEIGHT) {
             dead();
-        } else {
-            this.weight = weight;
         }
+        this.weight = weight;
     }
 
     /**
@@ -167,6 +180,9 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
         if (isDead()) {
             return;
         }
+        if (smellType == null) {
+            throw new NullPointerException("Smell cannot be null");
+        }
         switch (smellType) {
             case WEED:
                 setEmotionalState(EmotionalState.CHILL);
@@ -181,8 +197,6 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
                 increaseEmotionalState();
                 increaseEmotionalState();
                 break;
-            default:
-                throw new IllegalArgumentException("Unknown smell type");
         }
     }
 
@@ -201,7 +215,7 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
      */
     @Override
     public boolean isDead() {
-        return this.isAlive;
+        return !this.isAlive;
     }
 
     /**
@@ -212,13 +226,7 @@ public class Human implements Shadable, SmellSensible, Deadable, Comparable<Huma
      */
     @Override
     public int compareTo(Human o) {
-        if (this.equals(o)) {
-            return 0;
-        } else if (this.weight > o.weight) {
-            return 1;
-        } else {
-            return -1;
-        }
+        return Double.compare(this.weight, o.getWeight());
     }
 
 }
