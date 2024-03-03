@@ -3,6 +3,7 @@ package com.brigada.model.enumerations;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,11 +52,11 @@ class EmotionalStateTest {
     @Test
     @DisplayName("Check if enum match to it level")
     public void whenLevelFromEnumThenEnumFromLevel() {
-        assertAll("toString, getTitle, nameToLower is Equivalent",
-                () -> emotionalStates.forEach(val -> {
-                    assertEquals(val, EmotionalState.getStateByLevel(val.getLevel()));
-                })
-        );
+        List<Executable> executables = emotionalStates
+                .stream()
+                .map(val -> (Executable) () -> assertEquals(val, EmotionalState.getStateByLevel(val.getLevel())))
+                .collect(Collectors.toList());
+        assertAll("When get level from enum, then get same enum from the level", executables);
     }
 
     @Test
