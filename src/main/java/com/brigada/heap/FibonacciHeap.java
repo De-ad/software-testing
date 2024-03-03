@@ -1,161 +1,144 @@
 package com.brigada.heap;
 
+import java.util.ArrayList;
+
 import lombok.Getter;
 
 @Getter
 public class FibonacciHeap<T extends Comparable<T>> {
 
-    private FibonacciHeapNode<T> minNode;
+    private HeapNode minHeapNode;
     private int size;
     
     public FibonacciHeap() {
-        this.minNode = null;
+        this.minHeapNode = null;
         this.size = 0;
     }
 
-    public void insert(T key) {
-        FibonacciHeapNode<T> newNode = new FibonacciHeapNode<>(key);
-        if (minNode == null) {
-            minNode = newNode;
-        } else {
-            mergeLists(minNode, newNode);
-            if (newNode.getKey().compareTo(minNode.getKey()) < 0) {
-                minNode = newNode;
+    public FibonacciHeap(HeapNode minHeapNode) {
+        this.minHeapNode = minHeapNode;
+        this.size = 0;
+    }
+
+    public void mergeLists(HeapNode root1, HeapNode root2) {
+        HeapNode L = root1.getLeft();
+        HeapNode R = root2.getRight();
+        root2.setRight(root1);
+        root1.setLeft(root2);
+        L.setRight(R);
+        R.setLeft(L);
+    }
+
+    public void mergeHeaps(FibonacciHeap<T> heap){
+        if (heap.getSize() == 0){
+            return;
+        }
+        if (size == 0){
+            minHeapNode = heap.getMinHeapNode();
+            size = heap.getSize();
+        }
+        else{
+            mergeLists(minHeapNode, heap.getMinHeapNode());
+            size += heap.size;
+        }
+        minHeapNode = (minHeapNode.getKey() < heap.minHeapNode.getKey()) ? minHeapNode : heap.minHeapNode;
+    }
+
+    public int getMin(){
+        return (int) minHeapNode.getKey();
+    }
+
+    public void insert(int key) {
+        HeapNode newHeapNode = new HeapNode(key);
+        FibonacciHeap<T> newHeap = new FibonacciHeap<>(newHeapNode);
+        mergeHeaps(newHeap);
+    }
+
+    public int deleteMin(){
+        HeapNode prevMin = minHeapNode;
+        mergeLists(minHeapNode, minHeapNode.getChild()); 
+        HeapNode L = minHeapNode.getLeft();             
+        HeapNode R = minHeapNode.getRight();
+        L.setRight(R);
+        R.setLeft(L);
+        if (prevMin.getRight() == prevMin){
+            return minHeapNode.getKey();
+        } 
+        minHeapNode = minHeapNode.getRight();             
+        compress();
+        size--; 
+        return prevMin.getKey();
+    }
+
+    public void compress(){
+        ArrayList<HeapNode> A = new ArrayList<HeapNode>();
+        A.set(minHeapNode.getDegree(), minHeapNode);   
+        HeapNode current = minHeapNode.getRight();
+        while(A.get(current.getDegree()) != current){     
+            if (A.get(current.getDegree()) == null){     
+                A.set(current.getDegree(), current);
+                current = current.getRight();
             }
-        }
-        size++;
-    }
-
-    // Merge two circular doubly linked lists
-    private void mergeLists(FibonacciHeapNode<T> root1, FibonacciHeapNode<T> root2) {
-        FibonacciHeapNode<T> temp1 = root1.getRight();
-        root1.setRight(root2.getRight());
-        root2.getRight().setLeft(root1);
-        root2.setRight(temp1);
-        temp1.setLeft(root2);
-    }
-
-    public T extractMin() {
-        if (minNode == null) return null;
-        FibonacciHeapNode<T> extracted = minNode;
-        if (minNode.getChild() != null) {
-            FibonacciHeapNode<T> child = minNode.getChild();
-            do {
-                FibonacciHeapNode<T> next = child.getRight();
-                minNode.getChild().setParent(null);
-                mergeLists(minNode, child);
-                child = next;
-            } while (child != minNode.getChild());
-        }
-        minNode.getLeft().setRight(minNode.getRight());
-        minNode.getRight().setLeft(minNode.getLeft());
-        if (minNode == minNode.getRight()) {
-            minNode = null;
-        } else {
-            minNode = minNode.getRight();
-            consolidate();
-        }
-        size--;
-        return extracted.getKey();
-    }
-
-    // Consolidate the root list
-    private void consolidate() {
-        int maxDegree = (int) Math.ceil(Math.log(size) / Math.log(2));
-        FibonacciHeapNode<T>[] array = new FibonacciHeapNode[maxDegree * 2];
-        FibonacciHeapNode<T> current = minNode;
-        do {
-            FibonacciHeapNode<T> next = current.getRight();
-            int degree = current.getDegree();
-            while (array[degree] != null) {
-                FibonacciHeapNode<T> other = array[degree];
-                if (current.getKey().compareTo(other.getKey()) > 0) {
-                    FibonacciHeapNode<T> temp = current;
-                    current = other;
-                    other = temp;
+            else {                               
+                HeapNode conflict = A.get(current.getDegree());
+                HeapNode addTo;
+                HeapNode adding;
+                if (conflict.getKey() < current.getKey()){
+                    addTo = conflict;
+                    adding = current;
                 }
-                link(other, current);
-                array[degree] = null;
-                degree++;
-            }
-            array[degree] = current;
-            current = next;
-        } while (current != minNode);
-        minNode = null;
-        for (FibonacciHeapNode<T> node : array) {
-            if (node != null) {
-                if (minNode == null) {
-                    minNode = node;
-                } else {
-                    mergeLists(minNode, node);
-                    if (node.getKey().compareTo(minNode.getKey()) < 0) {
-                        minNode = node;
-                    }
+                else {
+                    addTo = current;
+                    adding = conflict;
                 }
+
+                mergeLists(addTo.getChild(), adding);
+                adding.setParent(addTo);
+                addTo.setDegree(addTo.getDegree() + 1);
+                current = addTo;    
+            }
+            if (minHeapNode.getKey() > current.getKey()){        
+                minHeapNode = current;   
             }
         }
     }
 
-    // Link two trees of the same degree
-    private void link(FibonacciHeapNode<T> child, FibonacciHeapNode<T> parent) {
-        child.getLeft().setRight(child.getRight());
-        child.getRight().setLeft(child.getLeft());
-        child.setParent(parent);
-        if (parent.getChild() == null) {
-            parent.setChild(child);
-            child.setLeft(child);
-            child.setRight(child);
-        } else {
-            mergeLists(parent.getChild(), child);
-        }
-        parent.setDegree(parent.getDegree() + 1);
-        child.setMarked(false);
+    public void decreaseKey(HeapNode node, int newValue){
+        if (newValue > node.getParent().getKey()){
+            node.setKey(newValue);
+            return;
+        } 
+        HeapNode parent = node.getParent();
+        cut(node);
+        cascadingCut(parent);
     }
 
-    public void decreaseKey(FibonacciHeapNode<T> node, T newKey) {
-        if (newKey.compareTo(node.getKey()) > 0) {
-            throw new IllegalArgumentException("New key is greater than the current key");
-        }
-        node.setKey(newKey);
-        FibonacciHeapNode<T> parent = node.getParent();
-        if (parent != null && node.getKey().compareTo(parent.getKey()) < 0) {
-            cut(node, parent);
-            cascadingCut(parent);
-        }
-        if (node.getKey().compareTo(minNode.getKey()) < 0) {
-            minNode = node;
-        }
-    }
-
-    // Cut a node from its parent
-    private void cut(FibonacciHeapNode<T> child, FibonacciHeapNode<T> parent) {
-        child.getLeft().setRight(child.getRight());
-        child.getRight().setLeft(child.getLeft());
-        parent.setDegree(parent.getDegree() - 1);
-        if (parent.getChild() == child) {
-            parent.setChild(child.getRight());
-        }
-        if (parent.getDegree() == 0) {
-            parent.setChild(null);
-        }
-        mergeLists(minNode, child);
-        child.setParent(null);
-        child.setMarked(false);
-    }
-
-    private void cascadingCut(FibonacciHeapNode<T> node) {
-        FibonacciHeapNode<T> parent = node.getParent();
-        if (parent != null) {
-            if (!node.isMarked()) {
-                node.setMarked(true);
-            } else {
-                cut(node, parent);
-                cascadingCut(parent);
+    public void cut(HeapNode node){
+        HeapNode L = node.getLeft();
+        HeapNode R = node.getRight();
+        R.setLeft(L);            
+        L.setRight(R);
+        node.getParent().setDegree( node.getParent().getDegree() - 1);
+        if (node.getParent().getChild() == node ){
+            if (node.getRight() == node){
+                node.getParent().setChild(null);
             }
+            else{
+                node.getParent().setChild(node.getRight());
+            } 
+        } 
+        node.setParent(node);
+        node.setLeft(node);
+        node.setParent(null);
+        mergeLists(minHeapNode, node);
+    }
+
+    public void cascadingCut(HeapNode node){
+        while(node.isMarked()){
+            cut(node);
+            node = node.getParent();
+            node.setMarked(true);
         }
     }
 
-    public boolean isEmpty() {
-        return size == 0;
-    }
 }
