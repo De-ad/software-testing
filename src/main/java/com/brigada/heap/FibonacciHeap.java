@@ -110,10 +110,6 @@ public class FibonacciHeap<T extends Comparable<T>> {
         while (A.get(current.getDegree()) != null) {
             HeapNode next = current.getRight();
 
-            if (A.get(current.getDegree()) == null) {
-                A.set(current.getDegree(), current);
-                current = next;
-            } else {
                 HeapNode conflict = A.get(current.getDegree());
                 HeapNode addTo, adding;
 
@@ -129,7 +125,6 @@ public class FibonacciHeap<T extends Comparable<T>> {
                 adding.setParent(addTo);
                 addTo.setDegree(addTo.getDegree() + 1);
                 current = addTo;
-            }
 
             if (minHeapNode.getKey() > current.getKey()) {
                 minHeapNode = current;
