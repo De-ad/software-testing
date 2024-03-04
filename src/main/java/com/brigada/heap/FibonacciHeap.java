@@ -138,48 +138,61 @@ public class FibonacciHeap<T extends Comparable<T>> {
     }
 
     public void decreaseKey(HeapNode node, int newValue) {
-        if (node.getParent() != null && (newValue < node.getParent().getKey())) {
-            node.setKey(newValue);
+        if(newValue > node.getKey()){
             return;
         }
-
+        node.setKey(newValue);
         HeapNode parent = node.getParent();
-        cut(node);
-        cascadingCut(parent);
-    }
-
-    private void cut(HeapNode node) {
-        if (node == null || node.getParent() == null)
-            return;
-
-        HeapNode L = node.getLeft();
-        HeapNode R = node.getRight();
-        R.setLeft(L);
-        L.setRight(R);
-        node.getParent().setDegree(node.getParent().getDegree() - 1);
-
-        if (node.getParent().getChild() == node) {
-            if (node.getRight() == node) {
-                node.getParent().setChild(null);
-            } else {
-                node.getParent().setChild(node.getRight());
-            }
+        if(parent!= null && node.getKey() < parent.getKey()){
+            cut(node, parent);
+            cascading_cut(parent);
+        } 
+        
+        // update min
+        if (node.getKey() < minHeapNode.getKey()){
+            minHeapNode = node;
         }
-
-        node.setRight(node);
-        node.setLeft(node);
-        node.setParent(null);
-        mergeLists(minHeapNode, node);
+        
     }
 
-    private void cascadingCut(HeapNode node) {
-        if (node == null || node.getParent() == null)
-            return;
+    private void cut(HeapNode x, HeapNode y) {
+        x.getRight().setLeft(x.getLeft());
+        x.getLeft().setRight(x.getRight());
+    
+        y.setDegree(y.getDegree() - 1);
+    
+        x.setRight(null);
+        x.setLeft(null);
+        insert(x);
+        x.setParent(null);
+        x.setMarked(false);
+      }
 
-        while (node.isMarked()) {
-            cut(node);
-            node = node.getParent();
-            node.setMarked(true);
+      private void insert(HeapNode x) {
+        if (minHeapNode == null) {
+          minHeapNode = x;
+          x.setLeft(minHeapNode);
+          x.setRight(minHeapNode);
+        } else {
+          x.setRight(minHeapNode);
+          x.setLeft(minHeapNode.getLeft());
+          minHeapNode.getLeft().setRight(x);
+          minHeapNode.setLeft(x);
+          if (x.getKey() < minHeapNode.getKey())
+            minHeapNode = x;
         }
-    }
+        size += 1;
+      }
+    
+      private void cascading_cut(HeapNode y) {
+        HeapNode z = y.getParent();
+        if (z != null) {
+          if (y.isMarked() == false)
+            y.setMarked(true);
+          else {
+            cut(y, z);
+            cascading_cut(z);
+          }
+        }
+      }
 }
