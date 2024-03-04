@@ -33,4 +33,17 @@ public class HeapNode{
             this.right = this;
             this.marked = false;
         }
+
+        @Override
+        public String toString() {
+            return "HeapNode{" +
+                    "key=" + key +
+                    ", degree=" + degree +
+                    ", parent=" + (parent != null ? parent.key : "null") +
+                    ", child=" + (child != null ? child.key : "null") +
+                    ", left=" + (left != null ? left.key : "null") +
+                    ", right=" + (right != null ? right.key : "null") +
+                    ", marked=" + marked +
+                    '}';
+        }
 }
