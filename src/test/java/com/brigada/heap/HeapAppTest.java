@@ -44,6 +44,20 @@ class HeapAppTest {
         assertEquals(5, heap.getMin());
     }
 
+    @Test
+    @DisplayName("Check delete min")
+    public void testDeleteMinimumForCompress() {
+        heap.insert(56);
+        heap.insert(22);
+        heap.insert(84);
+        heap.insert(32);
+        heap.insert(85);
+        heap.insert(15);
+        heap.insert(16);
+        assertEquals(15, heap.deleteMin());
+
+    }
+
     @Test 
     @DisplayName("Check delete min in heap with only one node")
     public void testDeleteMinimumWithOneNode(){
