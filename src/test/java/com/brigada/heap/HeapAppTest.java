@@ -35,6 +35,13 @@ class HeapAppTest {
         assertEquals(5, heap.getMin());
     }
 
+    @Test 
+    @DisplayName("Check delete min in heap with only one node")
+    public void testDeleteMinimumWithOneNode(){
+        heap.insert(5);
+        assertEquals(5, heap.deleteMin());
+    }
+
     @Test
     @DisplayName("Check two heaps merge")
     public void testMergeHeaps() {
@@ -49,6 +56,41 @@ class HeapAppTest {
 
         assertEquals(2, heap.getMin());
         assertEquals(4, heap.getSize());
+    }
+
+    @Test
+    @DisplayName("Check decrease key")
+    public void testDecreaseKey() {
+
+        heap.insert(5);
+        heap.insert(8);
+        heap.insert(12);
+
+        HeapNode nodeToDecrease = heap.getMinHeapNode();
+        heap.decreaseKey(nodeToDecrease, 3);
+        assertAll(
+            () -> assertEquals(5, heap.getMinHeapNode().getKey()),
+            () -> assertEquals(3, heap.getSize()),
+            () ->  assertEquals(5, heap.deleteMin()),
+            () -> assertEquals(8, heap.deleteMin()),
+            () -> assertEquals(12, heap.deleteMin())
+        );
+    }
+
+
+
+    @Test
+    @DisplayName("Check merge heap with empty heap")
+    public void testMergeEmptyHeap(){
+        heap.insert(5);
+        heap.insert(3);
+        
+        FibonacciHeap<Integer> heap2 = new FibonacciHeap<>();
+
+        heap.mergeHeaps(heap2);
+
+        assertEquals(3, heap.getMin());
+        assertEquals(2, heap.getSize());
     }
 
 }
