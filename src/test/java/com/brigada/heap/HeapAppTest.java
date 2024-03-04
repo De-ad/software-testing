@@ -26,6 +26,15 @@ class HeapAppTest {
     }
 
     @Test
+    @DisplayName("Insert min")
+    public void insertMin() {
+        HeapNode heapNode = new HeapNode();
+        heapNode.setKey(5);
+        heap.insert(heapNode);
+        assertEquals(5, heap.getMin());
+    }
+
+    @Test
     @DisplayName("Check delete min")
     public void testDeleteMinimum() {
         heap.insert(5);

@@ -169,7 +169,7 @@ public class FibonacciHeap<T extends Comparable<T>> {
         x.setMarked(false);
       }
 
-      private void insert(HeapNode x) {
+      public void insert(HeapNode x) {
         if (minHeapNode == null) {
           minHeapNode = x;
           x.setLeft(minHeapNode);
