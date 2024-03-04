@@ -35,7 +35,6 @@ class HeapAppTest {
         assertEquals(5, heap.getMin());
     }
 
-
     @Test
     @DisplayName("Check two heaps merge")
     public void testMergeHeaps() {
