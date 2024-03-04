@@ -146,7 +146,7 @@ public class FibonacciHeap<T extends Comparable<T>> {
 
         if(parent!= null && node.getKey() < parent.getKey()){
             cut(node, parent);
-            cascading_cut(parent);
+            cascadingCut(parent);
         } 
         
         // update min
@@ -185,14 +185,14 @@ public class FibonacciHeap<T extends Comparable<T>> {
         size += 1;
       }
     
-      private void cascading_cut(HeapNode y) {
+      private void cascadingCut(HeapNode y) {
         HeapNode z = y.getParent();
         if (z != null) {
           if (y.isMarked() == false)
             y.setMarked(true);
           else {
             cut(y, z);
-            cascading_cut(z);
+            cascadingCut(z);
           }
         }
       }
