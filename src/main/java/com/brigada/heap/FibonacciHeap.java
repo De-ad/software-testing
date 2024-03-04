@@ -141,8 +141,9 @@ public class FibonacciHeap<T extends Comparable<T>> {
         if(newValue > node.getKey()){
             return;
         }
-        node.setKey(newValue);
         HeapNode parent = node.getParent();
+        node.setKey(newValue);
+
         if(parent!= null && node.getKey() < parent.getKey()){
             cut(node, parent);
             cascading_cut(parent);

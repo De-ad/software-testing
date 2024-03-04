@@ -93,6 +93,26 @@ class HeapAppTest {
         assertEquals(1, heap.getMinHeapNode().getKey());
     }
 
+    @Test
+    @DisplayName("Check decrease key")
+    public void testDecreaseEndKey() {
+        heap.insert(5);
+        heap.insert(2);
+        heap.insert(8);
+        HeapNode parent = heap.getMinHeapNode();
+        HeapNode node = new HeapNode();
+        node.setKey(5);
+        parent.setChild(node);
+        node.setParent(parent);
+        HeapNode node2 = new HeapNode();
+        node2.setKey(8);
+        node.setChild(node2);
+        node2.setParent(node);
+        heap.decreaseKey(node, 1);
+        assertEquals(1, heap.getMinHeapNode().getKey());
+    }
+
+
 
 
     @Test
