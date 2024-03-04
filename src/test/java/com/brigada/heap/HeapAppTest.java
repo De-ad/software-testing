@@ -156,6 +156,48 @@ class HeapAppTest {
         assertEquals(1, heap.getMinHeapNode().getKey());
     }
 
+
+    @Test
+    @DisplayName("Check decrease key")
+    public void testAnotherDecrease() {
+        heap.insert(7);
+        heap.insert(18);
+        heap.insert(28);
+
+        HeapNode parent = heap.getMinHeapNode();
+        HeapNode node = new HeapNode();
+        node.setKey(24);
+        parent.setChild(node);
+        node.setParent(parent);
+
+        HeapNode nodeLeft = new HeapNode();
+        nodeLeft.setKey(23);
+        nodeLeft.setParent(parent);
+        nodeLeft.setRight(node);
+
+        HeapNode nodeRight = new HeapNode();
+        nodeRight.setKey(17);
+        nodeLeft.setLeft(nodeRight);
+
+        nodeRight.setParent(parent);
+        nodeRight.setRight(nodeLeft);
+        nodeRight.setLeft(node);
+
+        HeapNode node2 = new HeapNode();
+        node2.setKey(26);
+        node.setChild(node2);
+        node2.setParent(node);
+
+        HeapNode node3 = new HeapNode();
+        node3.setKey(35);
+        node2.setChild(node3);
+        node3.setParent(node2);
+        node.setMarked(true);
+        heap.decreaseKey(node2, 5);
+
+        assertEquals(5, heap.getMinHeapNode().getKey());
+    }
+
     @Test
     @DisplayName("Check merge heap with empty heap")
     public void testMergeEmptyHeap(){
