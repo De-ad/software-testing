@@ -14,15 +14,15 @@ class FunctionAppTest {
     @ParameterizedTest
     @DisplayName("Check factorial")
     @CsvSource({"0,1","1,1","2,2","3,6"})
-    public void testFactorial(String input, String expected) {
-        assertEquals(Integer.parseInt(expected), functionApp.getFactorial(Integer.parseInt(input)));
+    public void testFactorial(int input, int expected) {
+        assertEquals(expected, functionApp.getFactorial(input));
     }
 
     @ParameterizedTest
     @DisplayName("Check sin power series")
-    @CsvSource({"0, 0","1.57,1", "-1.57,-1", "3.14, 0", "-3.14, 0"})
-    public void testSinPowerSeries(String input, String expected) {
-        assertEquals(Integer.parseInt(expected), Math.round(functionApp.getSinPowerSeries(Double.parseDouble(input),0.1)));
+    @CsvSource({"0, 0","1.57,1", "-1.57,-1", "-0.52, -0.5", "0.52, 0.5", "3.14, 0", "-3.14, 0"})
+    public void testSinPowerSeries(Double input, Double expected) {
+        assertTrue(Math.abs(expected - functionApp.getSinPowerSeries(input,0.01)) <= 0.01);
     }
 
 }
