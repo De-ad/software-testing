@@ -14,16 +14,6 @@ public class HeapNode{
         private HeapNode right;
         private boolean marked;
 
-        public HeapNode(int key) {
-            this.key = key;
-            this.degree = 0;
-            this.parent = null;
-            this.child = null;
-            this.left = this;
-            this.right = this;
-            this.marked = false;
-        }
-
         public HeapNode() {
             this.key = 0;
             this.degree = 0;
