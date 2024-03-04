@@ -42,6 +42,13 @@ class HeapAppTest {
         assertEquals(5, heap.deleteMin());
     }
 
+
+    @Test 
+    @DisplayName("Check delete min in heap with empty heap")
+    public void testDeleteMinWithEmptyHeap(){
+        assertEquals(null, heap.deleteMin());
+    }
+
     @Test
     @DisplayName("Check two heaps merge")
     public void testMergeHeaps() {
@@ -82,10 +89,10 @@ class HeapAppTest {
     @Test
     @DisplayName("Check merge heap with empty heap")
     public void testMergeEmptyHeap(){
-        heap.insert(5);
-        heap.insert(3);
-        
+
         FibonacciHeap<Integer> heap2 = new FibonacciHeap<>();
+        heap2.insert(5);
+        heap2.insert(3);
 
         heap.mergeHeaps(heap2);
 
