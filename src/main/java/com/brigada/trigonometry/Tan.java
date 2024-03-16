@@ -1,6 +1,8 @@
 package com.brigada.trigonometry;
 
-public class Tan implements TrigonometryFunction {
+import com.brigada.interfaces.Function;
+
+public class Tan implements Function {
     private Sin sin;
     private Cos cos;
 

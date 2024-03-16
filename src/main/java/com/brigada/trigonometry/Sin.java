@@ -1,6 +1,8 @@
 package com.brigada.trigonometry;
 
-public class Sin implements TrigonometryFunction {
+import com.brigada.interfaces.Function;
+
+public class Sin implements Function {
     private final double EPSILON = 0.01;
 
     private int getFactorial(int n) {
