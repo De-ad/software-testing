@@ -6,7 +6,7 @@ public class Tan implements TrigonometryFunction {
 
     @Override
     public double calculate(double x) {
-        return sin.calculate(x)/cos.calculate(x);
+        return sin.calculate(x) / cos.calculate(x);
     }
-    
+
 }

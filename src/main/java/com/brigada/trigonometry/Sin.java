@@ -1,9 +1,9 @@
 package com.brigada.trigonometry;
 
 public class Sin implements TrigonometryFunction {
-    private double eps = 0.01;
+    private final double EPSILON = 0.01;
 
-    private int getFactorial(int n){
+    private int getFactorial(int n) {
         int result = 1;
         for (int i = 1; i <= n; i++) {
             result = result * i;
@@ -12,7 +12,7 @@ public class Sin implements TrigonometryFunction {
     }
 
     @Override
-    public double calculate(double x){
+    public double calculate(double x) {
         double sum = 0;
         int n = 0;
         double current;
@@ -23,7 +23,7 @@ public class Sin implements TrigonometryFunction {
             n++;
             current = Math.abs(temp);
 
-        } while (current >= eps);
+        } while (current >= EPSILON);
 
         return sum;
     }
