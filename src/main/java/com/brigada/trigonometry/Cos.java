@@ -9,7 +9,17 @@ public class Cos extends Function {
 
     @Override
     public double calculate(double x) {
-        return Math.sqrt(1 - Math.pow(baseFunction.calculate(x), 2));
+        double temp = x % (2*Math.PI);
+        if(temp > Math.PI/2 && temp < (Math.PI +Math.PI/2)){
+            return -Math.sqrt(1 - Math.pow(baseFunction.calculate(x), 2));
+        }
+        else{
+            double sinSq = Math.pow(baseFunction.calculate(x), 2);
+            if(sinSq > 1){
+                sinSq= Math.round(sinSq);
+            }
+            return Math.sqrt(1 - sinSq);
+        }
     }
 
     @Override
