@@ -30,7 +30,7 @@ public abstract class Function {
 
     public abstract void calculateAndWriteToFile(double start, double stop, double step);
 
-    public void calculateAndWriteToFile(double x, String className) {
+    protected void calculateAndWriteToFile(double x, String className) {
         String toPrint = x + ", " + calculate(x);
         String path = basePathStart + className + basePathEnd;
         try (PrintWriter pw = new PrintWriter(new FileWriter(path, true))) {

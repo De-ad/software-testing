@@ -21,7 +21,7 @@ public class LogN extends Function {
 
     @Override
     public void calculateAndWriteToFile(double x) {
-        super.calculateAndWriteToFile(x, this.getClass().getSimpleName());
+        super.calculateAndWriteToFile(x, "Log" + "_" + (int)LOG_BASE);
     }
 
     @Override
