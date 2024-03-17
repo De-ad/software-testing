@@ -1,6 +1,6 @@
 package com.brigada.trigonometry;
 
-import com.brigada.interfaces.Function;
+import com.brigada.general.Function;
 
 public class Cot extends Function {
     private final Cos cos;
@@ -19,6 +19,18 @@ public class Cot extends Function {
     @Override
     public double calculate(double x) {
         return cos.calculate(x) / baseFunction.calculate(x);
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double x) {
+        super.calculateAndWriteToFile(x, this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double start, double stop, double step) {
+        for (double x = start; x <= stop; x += step) {
+            calculateAndWriteToFile(x);
+        }
     }
 
 }

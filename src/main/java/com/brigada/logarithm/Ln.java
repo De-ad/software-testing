@@ -1,6 +1,6 @@
 package com.brigada.logarithm;
 
-import com.brigada.interfaces.Function;
+import com.brigada.general.Function;
 
 public class Ln extends Function {
 
@@ -22,13 +22,25 @@ public class Ln extends Function {
         double approx = EPSILON;
 
         while (Math.abs(approx) >= EPSILON) {
-            approx = Math.pow((1 - x) / (1 + x)  , n) / n;
+            approx = Math.pow((1 - x) / (1 + x), n) / n;
             result += approx;
             n += 2;
         }
 
         return result * -2;
 
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double x) {
+        super.calculateAndWriteToFile(x, this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double start, double stop, double step) {
+        for (double x = start; x <= stop; x += step) {
+            calculateAndWriteToFile(x);
+        }
     }
 
 }

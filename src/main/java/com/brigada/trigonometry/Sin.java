@@ -1,6 +1,6 @@
 package com.brigada.trigonometry;
 
-import com.brigada.interfaces.Function;
+import com.brigada.general.Function;
 
 public class Sin extends Function {
     private final double EPSILON = 0.01;
@@ -33,4 +33,17 @@ public class Sin extends Function {
 
         return sum;
     }
+
+    @Override
+    public void calculateAndWriteToFile(double x) {
+        super.calculateAndWriteToFile(x, this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double start, double stop, double step) {
+        for (double x = start; x <= stop; x += step) {
+            calculateAndWriteToFile(x);
+        }
+    }
+
 }

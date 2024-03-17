@@ -1,6 +1,6 @@
 package com.brigada.trigonometry;
 
-import com.brigada.interfaces.Function;
+import com.brigada.general.Function;
 
 import java.util.Set;
 
@@ -42,6 +42,18 @@ public class TrigonometryFunction extends Function {
     public double calculate(double x) {
 
         return 0;
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double x) {
+        super.calculateAndWriteToFile(x, this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double start, double stop, double step) {
+        for (double x = start; x <= stop; x += step) {
+            calculateAndWriteToFile(x);
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.brigada.logarithm;
 
-import com.brigada.interfaces.Function;
+import com.brigada.general.Function;
 
 public class LogN extends Function {
 
@@ -17,6 +17,18 @@ public class LogN extends Function {
             throw new IllegalArgumentException("x should be greater than 0");
         }
         return baseFunction.calculate(x) / baseFunction.calculate(LOG_BASE);
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double x) {
+        super.calculateAndWriteToFile(x, this.getClass().getSimpleName());
+    }
+
+    @Override
+    public void calculateAndWriteToFile(double start, double stop, double step) {
+        for (double x = start; x <= stop; x += step) {
+            calculateAndWriteToFile(x);
+        }
     }
 
 }
