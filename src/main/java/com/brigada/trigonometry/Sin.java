@@ -2,8 +2,12 @@ package com.brigada.trigonometry;
 
 import com.brigada.interfaces.Function;
 
-public class Sin implements Function {
+public class Sin extends Function {
     private final double EPSILON = 0.01;
+
+    public Sin() {
+        super(null);
+    }
 
     private int getFactorial(int n) {
         int result = 1;

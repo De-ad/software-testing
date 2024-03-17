@@ -1,7 +1,13 @@
 package com.brigada.interfaces;
 
-public interface Function {
+public abstract class Function {
 
-    double calculate(double x);
+    protected final Function baseFunction;
+
+    public Function(Function baseFunction) {
+        this.baseFunction = baseFunction;
+    }
+
+    public abstract double calculate(double x);
 
 }

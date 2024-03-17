@@ -2,12 +2,14 @@ package com.brigada.trigonometry;
 
 import com.brigada.interfaces.Function;
 
-public class Cos implements Function {
-    private Sin sin;
+public class Cos extends Function {
+    public Cos(Function baseFunction) {
+        super(baseFunction);
+    }
 
     @Override
     public double calculate(double x) {
-        return Math.sqrt(1 - Math.pow(sin.calculate(x), 2));
+        return Math.sqrt(1 - Math.pow(baseFunction.calculate(x), 2));
     }
 
 }
