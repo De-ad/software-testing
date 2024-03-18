@@ -17,6 +17,14 @@ public class Sec extends Function {
 
     @Override
     public double calculate(double x) {
+//        check period
+        double temp = x % (2*Math.PI);
+        if(x < 0){
+            temp += 2 * Math.PI;
+        }
+        if (temp == Math.PI/2 || temp == (Math.PI + Math.PI/2)) {
+            throw new IllegalArgumentException("x can't be pi*n - pi/2");
+        }
         return 1 / cos.calculate(x);
     }
 

@@ -18,12 +18,14 @@ public class Sin extends Function {
 
     @Override
     public double calculate(double x) {
-        x %= 2 * Math.PI;
+        //        check period
+        x = x % (2*Math.PI);
+        if (x < 0){
+            x += 2 * Math.PI;
+        }
+
         if (Math.round(x * 100.0) / 100.0 == (Math.round(Math.PI*2 * 100.0) / 100.0)){
             x = 0;
-        }
-        if (x < 0) {
-            x += 2 * Math.PI;
         }
 
         double sum = 0;

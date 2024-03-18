@@ -10,6 +10,15 @@ public class Csc extends Function {
 
     @Override
     public double calculate(double x) {
+        //        check period
+        double temp = x % (2*Math.PI);
+        if(x < 0){
+            temp += 2 * Math.PI;
+        }
+        if (temp == 0 || temp == Math.PI || temp == 2 * Math.PI ) {
+            throw new IllegalArgumentException("x can't be pi*n - pi/2");
+        }
+
         return 1 / baseFunction.calculate(x);
     }
 
