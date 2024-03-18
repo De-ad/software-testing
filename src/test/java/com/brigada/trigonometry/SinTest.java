@@ -12,7 +12,7 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SinTest {
-    private Sin sin;
+    private static Sin sin;
 
     private final double SCALE = Math.pow(10, 11);
 

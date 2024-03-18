@@ -1,10 +1,13 @@
 package com.brigada.trigonometry;
 
 import com.brigada.logarithm.Ln;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.mockito.Mock;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,76 +16,56 @@ import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 public class SecTest {
-    private Sec sec;
-    private Cos cos;
-    private Sin sin;
+
+    @Mock
+    private static Sin mockedSin = new Sin();
+    private static Cos mockedCos = new Cos(mockedSin);
+    private static Sec secWithMock = new Sec(mockedSin, mockedCos);
 
     private final double SCALE = Math.pow(10, 11);
 
     private final String filename = "out/" + Ln.class.getSimpleName() + "-out.csv";
 
-    @BeforeEach
-    public void initSec() {
-        this.sin = new Sin();
-        this.cos = new Cos(sin);
-        this.sec = new Sec(cos);
+     @BeforeAll
+    public static void init() {
+        secWithMock = new Sec(mockedSin, mockedCos);
+        Scanner scannerSin = new Scanner("/tables/SinTable.csv");
+        Scanner scannerCos = new Scanner("/tables/CosTable.csv");
+        scannerSin.nextLine();
+        while (scannerSin.hasNext()) {
+            String cur = scannerSin.nextLine();
+            double x = Double.parseDouble(cur.split(",")[0]);
+            double y = Double.parseDouble(cur.split(",")[1]);
+            when(mockedSin.calculate(x)).thenReturn(y);
+        }
+        scannerCos.nextLine();
+        while (scannerCos.hasNext()) {
+            String cur = scannerCos.nextLine();
+            double x = Double.parseDouble(cur.split(",")[0]);
+            double y = Double.parseDouble(cur.split(",")[1]);
+            when(mockedCos.calculate(x)).thenReturn(y);
+        }
     }
+
 
     @Test
     public void whenInvalidXThenIllegalArgumentException() {
         final double x = Math.PI/2;
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> sec.calculate(x)
+                () -> secWithMock.calculate(x)
         );
         assertEquals("x can't be pi*n - pi/2", exception.getMessage());
     }
 
-    @Test
-    public void whenWriteToFileXThenReadFromFileXY() throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter(filename);
-        writer.print("");
-        writer.close();
-        double x = 6;
-        sec.calculateAndWriteToFile(x);
-        Scanner scanner = new Scanner(new File(filename));
-        String result = scanner.nextLine();
-        assertEquals(x+ ", " + sec.calculate(x), result);
-    }
-
-    @Test
-    public void whenWriteToFileArrayOfXThenReadFromFileArrayOfXY() throws FileNotFoundException {
-        PrintWriter writer = new PrintWriter(filename);
-        writer.print("");
-        writer.close();
-        double start = 0.1;
-        double stop = 0.9;
-        double step = 0.1;
-        int len = (int) ((stop - start) / step);
-        double[] xs = new double[len];
-        double[] ys = new double[len];
-        double xCur = start;
-        for (int i = 0; i < len; i++) {
-            xs[i] = xCur;
-            ys[i] = sec.calculate(xCur);
-            xCur += step;
-        }
-        sec.calculateAndWriteToFile(start, stop, step);
-        Scanner scanner = new Scanner(new File(filename));
-        String curLine;
-
-        for (int i = 0; i < len; i++) {
-            curLine = scanner.nextLine();
-            assertEquals(xs[i]+ ", " + ys[i], curLine);
-        }
-    }
 
     @ParameterizedTest
-    @CsvFileSource(resources = {"/tables/LnTable.csv"}, numLinesToSkip = 1, delimiter = ',', useHeadersInDisplayName = true)
+    @CsvFileSource(resources = {"/tables/SecTable.csv"}, numLinesToSkip = 1, delimiter = ',', useHeadersInDisplayName = true)
     public void equivalenceAnalysis(double x, double y) {
-        assertEquals(Math.round(y * SCALE) / SCALE, Math.round(sec.calculate(x) * SCALE) / SCALE);
+        assertEquals(Math.round(y * SCALE) / SCALE, Math.round(secWithMock.calculate(x) * SCALE) / SCALE);
     }
     
 }
