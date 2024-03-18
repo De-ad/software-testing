@@ -24,7 +24,7 @@ public class Cot extends Function {
             temp += 2 * Math.PI;
         }
         if (temp == 0 || temp == Math.PI || temp == 2 * Math.PI ) {
-            throw new IllegalArgumentException("x can't be pi*n - pi/2");
+            throw new IllegalArgumentException("x can't be pi*n");
         }
         return cos.calculate(x) / baseFunction.calculate(x);
     }

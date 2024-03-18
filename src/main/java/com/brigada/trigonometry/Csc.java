@@ -16,7 +16,7 @@ public class Csc extends Function {
             temp += 2 * Math.PI;
         }
         if (temp == 0 || temp == Math.PI || temp == 2 * Math.PI ) {
-            throw new IllegalArgumentException("x can't be pi*n - pi/2");
+            throw new IllegalArgumentException("x can't be pi*n");
         }
 
         return 1 / baseFunction.calculate(x);

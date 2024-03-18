@@ -30,12 +30,12 @@ public class CscTest {
 
     @Test
     public void whenInvalidXThenIllegalArgumentException() {
-        final double x = -1;
+        final double x = Math.PI;
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> csc.calculate(x)
         );
-        assertEquals("x should be greater than 0", exception.getMessage());
+        assertEquals("x can't be pi*n", exception.getMessage());
     }
 
     @Test
