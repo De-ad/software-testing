@@ -28,16 +28,6 @@ public class CosTest {
     }
 
     @Test
-    public void whenInvalidXThenIllegalArgumentException() {
-        final double x = -1;
-        Exception exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> cos.calculate(x)
-        );
-        assertEquals("x should be greater than 0", exception.getMessage());
-    }
-
-    @Test
     public void whenWriteToFileXThenReadFromFileXY() throws FileNotFoundException {
         PrintWriter writer = new PrintWriter(filename);
         writer.print("");

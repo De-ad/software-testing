@@ -32,12 +32,12 @@ public class TanTest {
 
     @Test
     public void whenInvalidXThenIllegalArgumentException() {
-        final double x = -1;
+        final double x = Math.PI/2;
         Exception exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> tan.calculate(x)
         );
-        assertEquals("x should be greater than 0", exception.getMessage());
+        assertEquals("x can't be pi*n - pi/2", exception.getMessage());
     }
 
     @Test
